@@ -27,6 +27,7 @@ mod html;
 mod json;
 #[cfg(feature = "plugin_runtime")]
 mod language_plugin;
+mod llvm_mir;
 mod lua;
 mod nu;
 mod ocaml;
@@ -121,6 +122,7 @@ pub fn init(
         ("yaml", tree_sitter_yaml::language()),
         ("zig", tree_sitter_zig::language()),
         ("dart", tree_sitter_dart::language()),
+        ("llvm-mir", tree_sitter_llvm_mir::language()),
     ]);
 
     let language = |asset_dir_name: &'static str, adapters| {
@@ -324,6 +326,10 @@ pub fn init(
         ))],
     );
     language("dart", vec![Arc::new(dart::DartLanguageServer {})]);
+    language(
+        "llvm-mir",
+        vec![Arc::new(llvm_mir::LLVMIRLanguageServer {})],
+    );
 }
 
 #[cfg(any(test, feature = "test-support"))]
